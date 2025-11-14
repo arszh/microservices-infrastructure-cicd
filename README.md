@@ -1,8 +1,5 @@
 # Microservices Infrastructure & CI/CD Platform (Kubernetes, GitHub Actions, Helm, Docker)
 
-[![CI](https://github.com/arsenzh/microservices-infrastructure-cicd/actions/workflows/ci.yml/badge.svg)](https://github.com/arsenzh/microservices-infrastructure-cicd/actions/workflows/ci.yml)
-[![CD Staging](https://github.com/arsenzh/microservices-infrastructure-cicd/actions/workflows/cd-staging.yml/badge.svg)](https://github.com/arsenzh/microservices-infrastructure-cicd/actions/workflows/cd-staging.yml)
-[![CD Production](https://github.com/arsenzh/microservices-infrastructure-cicd/actions/workflows/cd-prod.yml/badge.svg)](https://github.com/arsenzh/microservices-infrastructure-cicd/actions/workflows/cd-prod.yml)
 
 A production-ready **DevOps platform** for a microservices system running on **Kubernetes**, with full CI/CD, security scanning, containerization, and environment separation.  
 Built using **GitHub Actions**, **Helm**, **Docker**, **Node.js**, and **GitHub Container Registry (GHCR)**.
