@@ -1,0 +1,13 @@
+{
+  "name": "service-users",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "lint": "echo \"lint ok\"",
+    "test": "echo \"tests ok\""
+  },
+  "dependencies": {
+    "express": "^4.19.0"
+  }
+}

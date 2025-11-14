@@ -1,0 +1,64 @@
+name: CD Staging
+
+on:
+  push:
+    branches: [ develop ]
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_PREFIX: ${{ github.repository }}
+  K8S_NAMESPACE: staging
+  RELEASE_NAME: app-staging
+
+jobs:
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    environment: staging
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup kubectl
+        uses: azure/setup-kubectl@v4
+        with:
+          version: 'latest'
+
+      - name: Setup Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: 'latest'
+
+      - name: Configure kubeconfig
+        run: |
+          mkdir -p ~/.kube
+          echo "${KUBE_CONFIG_STAGING}" > ~/.kube/config
+          chmod 600 ~/.kube/config
+        env:
+          KUBE_CONFIG_STAGING: ${{ secrets.KUBE_CONFIG_STAGING }}
+
+      - name: Create namespace if not exists
+        run: |
+          kubectl get ns ${{ env.K8S_NAMESPACE }} ||           kubectl create ns ${{ env.K8S_NAMESPACE }}
+
+      - name: Set image tag
+        id: vars
+        run: |
+          echo "image_tag=${GITHUB_SHA}" >> $GITHUB_OUTPUT
+
+      - name: Helm upgrade (staging)
+        run: |
+          helm upgrade ${{ env.RELEASE_NAME }} ./deploy/helm/app             --install             --namespace ${{ env.K8S_NAMESPACE }}             --set global.image.registry=${{ env.REGISTRY }}             --set global.image.prefix=${{ env.IMAGE_PREFIX }}             --set global.image.tag=${{ steps.vars.outputs.image_tag }}             --set environment.name=staging             --wait --timeout 5m
+
+      - name: Wait for all pods ready
+        run: |
+          kubectl rollout status deployment -n ${{ env.K8S_NAMESPACE }} --timeout=300s --all
+
+      - name: Run smoke tests
+        env:
+          BASE_URL: ${{ secrets.STAGING_BASE_URL }}
+        run: |
+          chmod +x ./scripts/smoke-tests-staging.sh
+          ./scripts/smoke-tests-staging.sh

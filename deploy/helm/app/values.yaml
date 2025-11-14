@@ -1,0 +1,31 @@
+global:
+  image:
+    registry: ghcr.io
+    prefix: owner/repo           # TODO: replace with your <owner>/<repo>
+    tag: "latest"
+
+environment:
+  name: staging
+
+services:
+  gateway:
+    port: 3000
+    replicaCount: 1
+
+  service-users:
+    port: 3001
+    replicaCount: 1
+
+  service-orders:
+    port: 3002
+    replicaCount: 1
+
+  service-payments:
+    port: 3003
+    replicaCount: 1
+
+ingress:
+  enabled: false
+  className: ""
+  host: example.com
+  tls: false

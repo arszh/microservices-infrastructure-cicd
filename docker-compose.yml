@@ -1,0 +1,34 @@
+version: "3.9"
+
+services:
+  gateway:
+    build: ./app/gateway
+    environment:
+      - SERVICE_NAME=gateway
+      - PORT=3000
+    ports:
+      - "3000:3000"
+
+  service-users:
+    build: ./app/service-users
+    environment:
+      - SERVICE_NAME=service-users
+      - PORT=3001
+    ports:
+      - "3001:3001"
+
+  service-orders:
+    build: ./app/service-orders
+    environment:
+      - SERVICE_NAME=service-orders
+      - PORT=3002
+    ports:
+      - "3002:3002"
+
+  service-payments:
+    build: ./app/service-payments
+    environment:
+      - SERVICE_NAME=service-payments
+      - PORT=3003
+    ports:
+      - "3003:3003"
